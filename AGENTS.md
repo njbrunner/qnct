@@ -25,7 +25,7 @@ When I explicitly authorize implementation of a GitHub issue:
 4. Run available local tests and validation.
 5. Commit changes with descriptive messages.
 6. Push the feature branch.
-7. Open a pull request referencing the issue, using `Closes #<issue-number>` where appropriate.
+7. Open a pull request referencing the issue. Include `Closes #<issue-number>` in the pull request description so merging automatically closes the linked issue. Do not rely solely on the pull request title for linking.
 8. Monitor the GitHub Actions CI pipeline associated with the pull request.
 9. Confirm that all required CI checks pass before reporting the implementation as complete.
 10. Provide a final implementation summary, including:
