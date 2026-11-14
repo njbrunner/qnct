@@ -6,8 +6,11 @@ import com.njbrunner.qnct.data.repository.ProfileRepository
 import com.njbrunner.qnct.domain.validation.ValidationError
 import com.njbrunner.qnct.domain.validation.ValidationResult
 import java.io.File
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -25,6 +28,7 @@ class OnboardingViewModelTest {
 
     private val testDispatcher = StandardTestDispatcher()
     private lateinit var testDataStoreFile: File
+    private lateinit var testDataStoreScope: CoroutineScope
     private lateinit var repository: ProfileRepository
     private lateinit var viewModel: OnboardingViewModel
 
@@ -32,7 +36,9 @@ class OnboardingViewModelTest {
     fun setUp() {
         Dispatchers.setMain(testDispatcher)
         testDataStoreFile = File.createTempFile("test_profile", ".preferences_pb")
+        testDataStoreScope = CoroutineScope(testDispatcher + SupervisorJob())
         val dataStore = PreferenceDataStoreFactory.create(
+            scope = testDataStoreScope,
             produceFile = { testDataStoreFile }
         )
         repository = ProfileRepository(dataStore)
@@ -42,6 +48,7 @@ class OnboardingViewModelTest {
     @After
     fun tearDown() {
         Dispatchers.resetMain()
+        testDataStoreScope.cancel()
         testDataStoreFile.delete()
     }
 
