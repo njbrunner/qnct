@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                     if (onboardingComplete) {
                         MainScreen()
                     } else {
-                        val onboardingViewModel = viewModel(
+                        val onboardingViewModel: OnboardingViewModel = viewModel(
                             factory = OnboardingViewModel.Factory(profileRepository)
                         )
                         OnboardingScreen(viewModel = onboardingViewModel)
