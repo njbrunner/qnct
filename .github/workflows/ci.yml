@@ -31,7 +31,7 @@ jobs:
         run: |
           ./gradlew assembleDebug --stacktrace --info > build.log 2>&1 || {
             echo "=== Kotlin compiler errors ==="
-            grep -E "^e:" build.log || true
+            grep -iE "^e:|error:|unresolved|cannot find|cannot access|type mismatch|expecting|incompatible" build.log | head -n 80 || true
             echo "=== Failure summary ==="
             tail -n 80 build.log
             exit 1
@@ -66,7 +66,14 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
+        run: |
+          ./gradlew testDebugUnitTest --stacktrace > test.log 2>&1 || {
+            echo "=== Test failures ==="
+            grep -iE "FAILED|fail|exception|error" test.log | head -n 80 || true
+            echo "=== Failure summary ==="
+            tail -n 80 test.log
+            exit 1
+          }
 
   lint:
     name: lint
