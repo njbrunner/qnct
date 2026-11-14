@@ -8,9 +8,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.njbrunner.qnct.ui.main.MainScreen
 import com.njbrunner.qnct.ui.onboarding.OnboardingViewModel
@@ -32,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val onboardingComplete by profileRepository.onboardingCompleteFlow
-                        .collectAsStateWithLifecycle(initialValue = null)
+                        .collectAsState(initial = null)
 
                     when (onboardingComplete) {
                         true -> MainScreen()
