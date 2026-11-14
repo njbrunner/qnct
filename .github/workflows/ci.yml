@@ -69,7 +69,7 @@ jobs:
         run: |
           ./gradlew testDebugUnitTest --stacktrace > test.log 2>&1 || {
             echo "=== Test failures ==="
-            grep -iE "FAILED|fail|exception|error" test.log | head -n 80 || true
+            find app/build/test-results -name "*.xml" -exec cat {} \; || true
             echo "=== Failure summary ==="
             tail -n 80 test.log
             exit 1
