@@ -63,4 +63,29 @@ class ProfileRepositoryTest {
 
         assertEquals(second, profile)
     }
+
+    @Test
+    fun `onboardingCompleteFlow emits false when nothing is saved`() = runTest {
+        val complete = repository.onboardingCompleteFlow.first()
+
+        assertEquals(false, complete)
+    }
+
+    @Test
+    fun `completeOnboarding persists profile and marks onboarding complete`() = runTest {
+        val profile = Profile(
+            fullName = "Jordan Casey",
+            phoneNumber = "+1 555-123-4567",
+            email = "jordan@example.com",
+            instagramUsername = "jordan.casey"
+        )
+
+        repository.completeOnboarding(profile)
+
+        val savedProfile = repository.profileFlow.first()
+        val onboardingComplete = repository.onboardingCompleteFlow.first()
+
+        assertEquals(profile, savedProfile)
+        assertEquals(true, onboardingComplete)
+    }
 }

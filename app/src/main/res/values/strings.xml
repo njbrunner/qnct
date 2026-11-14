@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">qnct</string>
+
+    <!-- Onboarding -->
+    <string name="onboarding_title">Set up your profile</string>
+    <string name="onboarding_subtitle">Enter your details to start sharing your contact info.</string>
+    <string name="save_profile_button">Save</string>
+
+    <!-- Profile form -->
+    <string name="full_name_label">Full name</string>
+    <string name="phone_number_label">Phone number</string>
+    <string name="email_label">Email</string>
+    <string name="instagram_username_label">Instagram username</string>
+
+    <!-- Validation errors -->
+    <string name="full_name_required_error">Full name is required</string>
+    <string name="phone_number_invalid_error">Enter a valid phone number</string>
+    <string name="email_invalid_error">Enter a valid email address</string>
+    <string name="instagram_username_invalid_error">Enter a valid Instagram username</string>
 </resources>
