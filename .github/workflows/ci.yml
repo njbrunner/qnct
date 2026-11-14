@@ -28,7 +28,21 @@ jobs:
         run: chmod +x gradlew
 
       - name: Build debug APK
-        run: ./gradlew assembleDebug
+        run: |
+          ./gradlew assembleDebug --stacktrace --info > build.log 2>&1 || {
+            echo "=== Kotlin compiler errors ==="
+            grep -iE "^e:|error:|unresolved|cannot find|cannot access|type mismatch|expecting|incompatible" build.log | head -n 80 || true
+            echo "=== Failure summary ==="
+            tail -n 80 build.log
+            exit 1
+          }
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-logs
+          path: build.log
 
   test:
     name: test
@@ -52,7 +66,14 @@ jobs:
         run: chmod +x gradlew
 
       - name: Run unit tests
-        run: ./gradlew testDebugUnitTest
+        run: |
+          ./gradlew testDebugUnitTest --stacktrace > test.log 2>&1 || {
+            echo "=== Test failures ==="
+            find app/build/test-results -name "*.xml" -exec cat {} \; || true
+            echo "=== Failure summary ==="
+            tail -n 80 test.log
+            exit 1
+          }
 
   lint:
     name: lint
