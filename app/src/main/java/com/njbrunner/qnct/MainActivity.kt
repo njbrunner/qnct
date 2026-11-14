@@ -7,8 +7,11 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.njbrunner.qnct.ui.main.MainScreen
@@ -30,8 +33,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val onboardingComplete by profileRepository.onboardingCompleteFlow
-                        .collectAsState(initial = false)
+                    var onboardingComplete by remember { mutableStateOf(false) }
+                    LaunchedEffect(Unit) {
+                        profileRepository.onboardingCompleteFlow.collect { onboardingComplete = it }
+                    }
 
                     if (onboardingComplete) {
                         MainScreen()

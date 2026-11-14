@@ -116,13 +116,20 @@ fun ProfileForm(
 private fun ValidationResult.errorMessage(): String? {
     return when (this) {
         is ValidationResult.Valid -> null
-        is ValidationResult.Invalid -> when (error) {
-            ValidationError.FULL_NAME_REQUIRED -> stringResource(R.string.full_name_required_error)
-            ValidationError.PHONE_NUMBER_INVALID -> stringResource(R.string.phone_number_invalid_error)
-            ValidationError.EMAIL_INVALID -> stringResource(R.string.email_invalid_error)
-            ValidationError.INSTAGRAM_USERNAME_INVALID -> stringResource(R.string.instagram_username_invalid_error)
-        }
+        is ValidationResult.Invalid -> error.stringResource()
     }
 }
 
 private fun ValidationResult.isInvalid(): Boolean = this is ValidationResult.Invalid
+
+@Composable
+private fun ValidationError.stringResource(): String {
+    return stringResource(
+        when (this) {
+            ValidationError.FULL_NAME_REQUIRED -> R.string.full_name_required_error
+            ValidationError.PHONE_NUMBER_INVALID -> R.string.phone_number_invalid_error
+            ValidationError.EMAIL_INVALID -> R.string.email_invalid_error
+            ValidationError.INSTAGRAM_USERNAME_INVALID -> R.string.instagram_username_invalid_error
+        }
+    )
+}

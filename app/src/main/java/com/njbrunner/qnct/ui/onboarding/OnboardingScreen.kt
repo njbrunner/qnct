@@ -21,7 +21,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.njbrunner.qnct.R
 import com.njbrunner.qnct.data.model.Profile
-import com.njbrunner.qnct.domain.validation.ProfileValidator
+import com.njbrunner.qnct.domain.validation.ProfileValidationState
+import com.njbrunner.qnct.domain.validation.ValidationResult
 import com.njbrunner.qnct.ui.components.ProfileForm
 import com.njbrunner.qnct.ui.theme.QnctTheme
 
@@ -115,8 +116,11 @@ private fun OnboardingScreenPreview() {
         OnboardingContent(
             uiState = OnboardingUiState(
                 profile = Profile(fullName = "Jordan Casey"),
-                validationState = ProfileValidator.validateProfile(
-                    Profile(fullName = "Jordan Casey")
+                validationState = ProfileValidationState(
+                    fullName = ValidationResult.Valid,
+                    phoneNumber = ValidationResult.Valid,
+                    email = ValidationResult.Valid,
+                    instagramUsername = ValidationResult.Valid
                 )
             ),
             onFullNameChange = {},
