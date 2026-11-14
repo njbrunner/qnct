@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.njbrunner.qnct.R
 import com.njbrunner.qnct.data.model.Profile
+import com.njbrunner.qnct.domain.validation.ProfileValidator
 import com.njbrunner.qnct.ui.components.ProfileForm
 import com.njbrunner.qnct.ui.theme.QnctTheme
 
@@ -112,7 +113,12 @@ private fun OnboardingContent(
 private fun OnboardingScreenPreview() {
     QnctTheme {
         OnboardingContent(
-            uiState = OnboardingUiState(profile = Profile(fullName = "Jordan Casey")),
+            uiState = OnboardingUiState(
+                profile = Profile(fullName = "Jordan Casey"),
+                validationState = ProfileValidator.validateProfile(
+                    Profile(fullName = "Jordan Casey")
+                )
+            ),
             onFullNameChange = {},
             onPhoneNumberChange = {},
             onEmailChange = {},
