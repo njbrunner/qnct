@@ -47,7 +47,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `initial state has empty profile and invalid full name`() = runTest {
+    fun `initial state has empty profile and invalid full name`() = runTest(testDispatcher) {
         val state = viewModel.uiState.value
 
         assertEquals(Profile(), state.profile)
@@ -61,7 +61,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `updateFullName updates profile and validation state`() = runTest {
+    fun `updateFullName updates profile and validation state`() = runTest(testDispatcher) {
         viewModel.updateFullName("Jordan Casey")
         advanceUntilIdle()
 
@@ -71,7 +71,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `updatePhoneNumber with invalid input shows validation error`() = runTest {
+    fun `updatePhoneNumber with invalid input shows validation error`() = runTest(testDispatcher) {
         viewModel.updateFullName("Jordan Casey")
         viewModel.updatePhoneNumber("abc")
         advanceUntilIdle()
@@ -85,7 +85,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `saveProfile does nothing when validation fails`() = runTest {
+    fun `saveProfile does nothing when validation fails`() = runTest(testDispatcher) {
         viewModel.saveProfile()
         advanceUntilIdle()
 
@@ -98,7 +98,7 @@ class OnboardingViewModelTest {
     }
 
     @Test
-    fun `saveProfile persists profile and marks onboarding complete when valid`() = runTest {
+    fun `saveProfile persists profile and marks onboarding complete when valid`() = runTest(testDispatcher) {
         viewModel.updateFullName("Jordan Casey")
         viewModel.updatePhoneNumber("+1 555-123-4567")
         viewModel.updateEmail("jordan@example.com")
