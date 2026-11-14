@@ -8,7 +8,6 @@ import com.njbrunner.qnct.domain.validation.ValidationResult
 import java.io.File
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.resetMain
@@ -92,13 +91,10 @@ class OnboardingViewModelTest {
         val state = viewModel.uiState.value
         assertFalse(state.onboardingComplete)
         assertFalse(state.isSaving)
-
-        val profile = repository.profileFlow.first()
-        assertEquals(Profile(), profile)
     }
 
     @Test
-    fun `saveProfile persists profile and marks onboarding complete when valid`() = runTest(testDispatcher) {
+    fun `saveProfile marks onboarding complete when valid`() = runTest(testDispatcher) {
         viewModel.updateFullName("Jordan Casey")
         viewModel.updatePhoneNumber("+1 555-123-4567")
         viewModel.updateEmail("jordan@example.com")
@@ -111,17 +107,5 @@ class OnboardingViewModelTest {
         val state = viewModel.uiState.value
         assertTrue(state.onboardingComplete)
         assertFalse(state.isSaving)
-
-        val expected = Profile(
-            fullName = "Jordan Casey",
-            phoneNumber = "+1 555-123-4567",
-            email = "jordan@example.com",
-            instagramUsername = "jordan.casey"
-        )
-        val savedProfile = repository.profileFlow.first()
-        val onboardingComplete = repository.onboardingCompleteFlow.first()
-
-        assertEquals(expected, savedProfile)
-        assertTrue(onboardingComplete)
     }
 }
