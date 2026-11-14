@@ -45,8 +45,12 @@ jobs:
             const fs = require('fs');
             const log = fs.readFileSync('build.log', 'utf8');
             const lines = log.split('\n');
-            const errorIndex = lines.findIndex(line => line.includes('FAILURE:') || line.includes('ERROR:') || line.includes('What went wrong'));
-            const summary = errorIndex >= 0 ? lines.slice(errorIndex, errorIndex + 80).join('\n') : log.slice(-4000);
+            const kotlinErrors = lines.filter(line => line.startsWith('e:') || line.includes('error:'));
+            const failureIndex = lines.findIndex(line => line.includes('FAILURE:') || line.includes('What went wrong'));
+            const failureContext = failureIndex >= 0 ? lines.slice(failureIndex, failureIndex + 40).join('\n') : '';
+            const summary = kotlinErrors.length > 0
+              ? kotlinErrors.slice(0, 40).join('\n') + '\n\n' + failureContext
+              : failureContext || log.slice(-4000);
             github.rest.issues.createComment({
               issue_number: context.issue.number,
               owner: context.repo.owner,
